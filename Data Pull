@@ -1,0 +1,28 @@
+
+from sportsipy.nfl.boxscore import Boxscore
+from sportsipy.nfl.teams import Teams
+import datetime
+
+# Import a list of team names
+teams = Teams(2021)
+teams = pd.DataFrame(teams, columns = ['teams'])
+teams.teams = teams.teams.astype(str)
+
+# Pull the team abbreviations
+teams['abbr'] = teams.teams.str.split('(', expand = True)[1].str.split(')', expand = True)[0].str.lower()
+
+# Create a range of dates for the season to search
+dates = pd.DataFrame(pd.date_range('2021-09-01',datetime.date.today(),freq='d'), columns = ['date'])
+dates['date'] = dates.date.astype(str)
+for i in range(len(dates)):
+    dates.loc[i, 'date'] = dates.loc[i, 'date'][5:10].replace('-','')
+
+# Pull game results into a dataframe
+games = pd.DataFrame()
+for i in teams.abbr:
+    for j in dates.date:
+        print(i,j)
+        game_data = Boxscore('2021{}0{}'.format(str(j),i))
+        games = games.append(game_data.dataframe)  # Returns a Pandas DataFrame of game metrics
+
+games.to_csv('C:\\Users\\conno\\OneDrive\\Desktop\\Sports Bets\\games.csv', index = False)
