@@ -24,5 +24,3 @@ for i in teams.abbr:
         print(i,j)
         game_data = Boxscore('2021{}0{}'.format(str(j),i))
         games = games.append(game_data.dataframe)  # Returns a Pandas DataFrame of game metrics
-
-games.to_csv('C:\\Users\\conno\\OneDrive\\Desktop\\Sports Bets\\games.csv', index = False)
